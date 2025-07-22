@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: kob_backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kob_backend
+    driver-class-name: org.postgresql.Driver
+    username: iseoin
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080

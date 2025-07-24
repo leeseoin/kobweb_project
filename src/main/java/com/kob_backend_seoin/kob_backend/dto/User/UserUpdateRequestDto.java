@@ -1,4 +1,4 @@
-package com.kob_backend_seoin.kob_backend.dto;
+package com.kob_backend_seoin.kob_backend.dto.User;
 
 public class UserUpdateRequestDto {
     private String nickname;

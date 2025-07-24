@@ -10,7 +10,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create-drop # 개발 환경에서만 사용 → 서버를 재시작 할 때마다 테이블 초기화
+      # ddl-auto: none # 운영 환경에서 사용 → 테이블 초기화 방지
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:

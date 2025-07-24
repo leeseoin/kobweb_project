@@ -1,8 +1,8 @@
 package com.kob_backend_seoin.kob_backend.controller;
 
 import com.kob_backend_seoin.kob_backend.dto.ApiResponse;
-import com.kob_backend_seoin.kob_backend.dto.ProfileResponseDto;
-import com.kob_backend_seoin.kob_backend.dto.ProfileUpdateRequestDto;
+import com.kob_backend_seoin.kob_backend.dto.Profile.ProfileUpdateRequestDto;
+import com.kob_backend_seoin.kob_backend.dto.Profile.ProfileResponseDto;
 import com.kob_backend_seoin.kob_backend.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

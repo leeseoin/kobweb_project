@@ -1,6 +1,8 @@
-package com.kob_backend_seoin.kob_backend.dto;
+package com.kob_backend_seoin.kob_backend.dto.Profile;
 
 import java.util.List;
+
+import com.kob_backend_seoin.kob_backend.dto.Profile.ProfileResponseDto;
 
 public class ProfileUpdateRequestDto {
     private String name;

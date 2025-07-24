@@ -1,12 +1,12 @@
 package com.kob_backend_seoin.kob_backend.controller;
 
-import com.kob_backend_seoin.kob_backend.dto.UserSignupRequestDto;
-import com.kob_backend_seoin.kob_backend.dto.UserSignupResponseDto;
-import com.kob_backend_seoin.kob_backend.dto.UserUpdateRequestDto;
-import com.kob_backend_seoin.kob_backend.dto.UserResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserSignupResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserLoginResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserSignupRequestDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserUpdateRequestDto;
 import com.kob_backend_seoin.kob_backend.dto.ApiResponse;
-import com.kob_backend_seoin.kob_backend.dto.UserLoginRequestDto;
-import com.kob_backend_seoin.kob_backend.dto.UserLoginResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserLoginRequestDto;
 import com.kob_backend_seoin.kob_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

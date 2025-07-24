@@ -1,16 +1,15 @@
 package com.kob_backend_seoin.kob_backend.service;
 
 import com.kob_backend_seoin.kob_backend.domain.User;
-import com.kob_backend_seoin.kob_backend.dto.UserSignupRequestDto;
-import com.kob_backend_seoin.kob_backend.dto.UserSignupResponseDto;
-import com.kob_backend_seoin.kob_backend.dto.UserUpdateRequestDto;
-import com.kob_backend_seoin.kob_backend.dto.UserResponseDto;
-import com.kob_backend_seoin.kob_backend.dto.UserLoginRequestDto;
-import com.kob_backend_seoin.kob_backend.dto.UserLoginResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserSignupResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserLoginResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserResponseDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserSignupRequestDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserUpdateRequestDto;
+import com.kob_backend_seoin.kob_backend.dto.User.UserLoginRequestDto;
 import com.kob_backend_seoin.kob_backend.repository.UserRepository;
 import com.kob_backend_seoin.kob_backend.exception.CustomException;
 import com.kob_backend_seoin.kob_backend.exception.ErrorCode;
-import com.kob_backend_seoin.kob_backend.service.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

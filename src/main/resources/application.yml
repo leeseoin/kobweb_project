@@ -6,7 +6,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/kob_backend
     driver-class-name: org.postgresql.Driver
     username: iseoin
-    password:
+    password: 1234
 
   jpa:
     hibernate:

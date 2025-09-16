@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: kob_backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kob_backend
+    driver-class-name: org.postgresql.Driver
+    username: iseoin
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update # ✅ 기존 테이블 유지, 스키마 변경만 적용
+      # ddl-auto: create-drop # 개발 환경에서만 사용 → 서버를 재시작 할 때마다 테이블 초기화
+      # ddl-auto: validate # 운영 환경에서 사용 → 스키마 검증만, 변경 금지
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+
+  # 인코딩 설정 추가
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  # Redis 및 Cache 설정은 Java Config에서 완전히 관리 (비활성화)
+  
+  # AOP 프록시 설정 - CGLIB 강제 사용
+  aop:
+    proxy-target-class: true
+    auto: true
+  
+  # Spring Cache 프록시 강제 생성
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/json,text/plain,text/html
+    min-response-size: 1024
+  # 서버 인코딩 설정
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# 로깅 설정
+logging:
+  level:
+    com.kob_backend_seoin.kob_backend: DEBUG
+    # org.springframework.cache: DEBUG
+    # org.springframework.data.redis.cache: DEBUG

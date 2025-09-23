@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Kobweb Fullstack Project
 
 Spring Boot + Next.js 기반의 비즈니스 카드 및 프로필 관리 시스템
@@ -124,3 +125,13 @@ npm run build
 1. 새 기능 개발 시 새 브랜치 생성
 2. 백엔드 API 변경 시 프론트엔드 API 클라이언트 업데이트
 3. CORS 설정 변경 시 보안 검토 필수
+=======
+# kobweb_project
+"feat: 캐시 기능 제거 및 최신 백엔드 코드 업데이트
+
+- CacheConfig, RedisConfig, HashCacheService, ManualCacheService 비활성화
+- ChatService에서 모든 캐시 관련 코드 주석 처리
+- 캐시 테스트 API 엔드포인트들 비활성화
+- SecurityConfig에서 캐시 관련 경로 제거
+- 빌드 성공 확인 완료"
+>>>>>>> 32856816639454fad336f07333da205d038b60ab

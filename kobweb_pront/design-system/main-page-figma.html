@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kobweb - Main Page Design</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.5.0/remixicon.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1E2022;
+        }
+
+        /* 🎨 Color Variables */
+        :root {
+            --primary: #1E2022;
+            --primary-light: #34373b;
+            --bg-main: #F0F5F9;
+            --bg-feature: #C9D6DF;
+            --bg-card: #e1e4e6;
+            --text-primary: #1E2022;
+            --text-secondary: #52616B;
+            --border-main: #bfc7d1;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 🎯 Header */
+        .header {
+            background: var(--bg-main);
+            border-bottom: 1px solid var(--border-main);
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 🚀 Hero Section */
+        .hero {
+            background: var(--bg-main);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--bg-main);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-main);
+        }
+
+        .btn-outline:hover {
+            opacity: 0.8;
+        }
+
+        /* ✨ Features Section */
+        .features {
+            background: var(--bg-feature);
+            padding: 80px 0;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .features-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .features-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 1024px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .feature-icon i {
+            font-size: 24px;
+            color: var(--bg-main);
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 💬 Testimonials Section */
+        .testimonials {
+            background: var(--bg-main);
+            padding: 80px 0;
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .testimonials-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .testimonials-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            padding: 32px;
+            border-radius: 12px;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--border-main);
+            margin-right: 16px;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .testimonial-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 🚀 CTA Section */
+        .cta {
+            background: var(--bg-feature);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .cta-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: var(--bg-main);
+            padding: 12px 32px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+
+        /* 📱 Footer */
+        .footer {
+            background: var(--bg-main);
+            border-top: 1px solid var(--border-main);
+            padding: 48px 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            font-size: 20px;
+            transition: opacity 0.2s ease;
+        }
+
+        .social-links a:hover {
+            opacity: 0.8;
+        }
+
+        .footer-bottom {
+            text-align: right;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-main);
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+            color: #788189;
+            margin-bottom: 8px;
+        }
+
+        .footer-bottom a {
+            color: #788189;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* 📱 Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .hero-description {
+                font-size: 18px;
+            }
+
+            .features-title,
+            .testimonials-title,
+            .cta-title {
+                font-size: 28px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 🎯 Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Kobweb</div>
+                <nav></nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 🚀 Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to Our Platform</h1>
+                <p class="hero-description">
+                    Your professional network for business connections and opportunities
+                </p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">Get Started</a>
+                    <button class="btn btn-outline">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✨ Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-header">
+                <h2 class="features-title">Digital Business Card Management</h2>
+                <p class="features-description">
+                    Transform your physical business cards into powerful digital connections. Our advanced card registration
+                    system allows you to instantly digitize and organize your professional network. Visualize your business
+                    relationships through our innovative relationship mapping feature, helping you understand and leverage your
+                    professional connections like never before. Discover hidden networking opportunities and strengthen your
+                    business relationships with our intelligent networking insights.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="ri-qr-scan-line"></i>
+                    </div>
+                    <h3 class="feature-title">Card Scanning</h3>
+                    <p class="feature-description">
+                        Instantly digitize business cards with AI-powered scanning technology
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="ri-share-line"></i>
+                    </div>
+                    <h3 class="feature-title">Network Mapping</h3>
+                    <p class="feature-description">
+                        Visualize and understand your professional connections
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="ri-lightbulb-line"></i>
+                    </div>
+                    <h3 class="feature-title">Smart Insights</h3>
+                    <p class="feature-description">
+                        Discover hidden opportunities within your network
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 💬 Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="testimonials-header">
+                <h2 class="testimonials-title">Customer Testimonials</h2>
+                <p class="testimonials-subtitle">See what our clients say about Kobweb</p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Sarah Johnson</div>
+                            <div class="testimonial-title">Marketing Director</div>
+                        </div>
+                    </div>
+                    <p class="testimonial-content">
+                        "Kobweb has revolutionized how we manage our business cards. The digital transformation is seamless and professional."
+                    </p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Michael Chen</div>
+                            <div class="testimonial-title">Sales Manager</div>
+                        </div>
+                    </div>
+                    <p class="testimonial-content">
+                        "The account management features are incredibly intuitive. Our team productivity has increased by 40% since implementing."
+                    </p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar"></div>
+                        <div>
+                            <div class="testimonial-name">Emily Rodriguez</div>
+                            <div class="testimonial-title">Business Owner</div>
+                        </div>
+                    </div>
+                    <p class="testimonial-content">
+                        "Outstanding service and support. Kobweb simplified our networking process and helped us connect with more clients effectively."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🚀 CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Are you ready to start now?</h2>
+                <p class="cta-description">
+                    Join thousands of businesses already using Kobweb to streamline their networking and
+                    business card management.
+                </p>
+                <a href="#" class="cta-button">Request a Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 📱 Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 style="font-family: 'Pacifico', cursive;">logo</h3>
+                    <p>
+                        Revolutionizing business networking through innovative digital solutions and professional card management.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="ri-facebook-fill"></i></a>
+                        <a href="#"><i class="ri-linkedin-fill"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2024 Company. All rights reserved.</p>
+                <a href="https://readdy.ai/?origin=logo">Made with Readdy</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

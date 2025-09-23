@@ -23,6 +23,8 @@ dependencies {
 	implementation 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// OAuth2 (비활성화 - JWT 인증만 사용)
+	// implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	// WebSocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	// JWT
@@ -32,6 +34,8 @@ dependencies {
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	// Health Check & Monitoring
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	testImplementation 'org.springframework.security:spring-security-test'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'

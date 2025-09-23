@@ -1,0 +1,667 @@
+{
+  "timestamp": "2025-09-22T07:25:50.032Z",
+  "summary": {
+    "totalFiles": 23,
+    "totalColors": 24,
+    "totalClasses": 471,
+    "uniqueColors": [
+      "#065f46",
+      "#1e2022",
+      "#22c55e",
+      "#34373b",
+      "#3a6bff",
+      "#3b82f6",
+      "#4ade80",
+      "#4f80ff",
+      "#52616b",
+      "#60a5fa",
+      "#6b7280",
+      "#788189",
+      "#8a9ba8",
+      "#a7f3d0",
+      "#bfc7d1",
+      "#c9d6df",
+      "#d1fae5",
+      "#dc2626",
+      "#e1e4e6",
+      "#f0f5f9",
+      "#f8f9fa",
+      "#f8fafb",
+      "#fecaca",
+      "#fee2e2"
+    ]
+  },
+  "colorAnalysis": {
+    "usage": {
+      "#f0f5f9": 18,
+      "#1e2022": 18,
+      "#52616b": 17,
+      "#bfc7d1": 9,
+      "#34373b": 16,
+      "#c9d6df": 12,
+      "#e1e4e6": 15,
+      "#788189": 2,
+      "#4f80ff": 1,
+      "#3a6bff": 1,
+      "#f8f9fa": 1,
+      "#22c55e": 1,
+      "#3b82f6": 1,
+      "#6b7280": 1,
+      "#4ade80": 1,
+      "#60a5fa": 1,
+      "#f8fafb": 1,
+      "#8a9ba8": 1
+    },
+    "topColors": [
+      [
+        "#f0f5f9",
+        18
+      ],
+      [
+        "#1e2022",
+        18
+      ],
+      [
+        "#52616b",
+        17
+      ],
+      [
+        "#34373b",
+        16
+      ],
+      [
+        "#e1e4e6",
+        15
+      ],
+      [
+        "#c9d6df",
+        12
+      ],
+      [
+        "#bfc7d1",
+        9
+      ],
+      [
+        "#788189",
+        2
+      ],
+      [
+        "#4f80ff",
+        1
+      ],
+      [
+        "#3a6bff",
+        1
+      ]
+    ],
+    "categorized": {
+      "Gray Scale": [
+        "#f0f5f9",
+        "#1e2022",
+        "#e1e4e6",
+        "#34373b",
+        "#bfc7d1",
+        "#788189",
+        "#f8fafb",
+        "#f8f9fa"
+      ],
+      "Blue Tones": [
+        "#4f80ff",
+        "#3a6bff",
+        "#3b82f6",
+        "#60a5fa"
+      ],
+      "Status Colors": [
+        "#dc2626"
+      ],
+      "Brand Colors": [],
+      "Others": [
+        "#52616b",
+        "#c9d6df",
+        "#d1fae5",
+        "#065f46",
+        "#a7f3d0",
+        "#fee2e2",
+        "#fecaca",
+        "#22c55e",
+        "#6b7280",
+        "#4ade80",
+        "#8a9ba8"
+      ]
+    }
+  },
+  "patternAnalysis": {
+    "usage": {
+      "hover-effects": 20,
+      "transitions": 19,
+      "border-radius": 20,
+      "shadows": 10,
+      "gradients": 3
+    },
+    "topPatterns": [
+      [
+        "hover-effects",
+        20
+      ],
+      [
+        "border-radius",
+        20
+      ],
+      [
+        "transitions",
+        19
+      ],
+      [
+        "shadows",
+        10
+      ],
+      [
+        "gradients",
+        3
+      ]
+    ]
+  },
+  "componentAnalysis": {
+    "page": {
+      "file": "app/test/page.tsx",
+      "colors": [],
+      "patterns": [],
+      "complexity": 3
+    },
+    "layout": {
+      "file": "app/layout.tsx",
+      "colors": [],
+      "patterns": [],
+      "complexity": 1
+    },
+    "not-found": {
+      "file": "app/not-found.tsx",
+      "colors": [],
+      "patterns": [],
+      "complexity": 4
+    },
+    "ResumeDetail": {
+      "file": "app/resume/[id]/ResumeDetail.tsx",
+      "colors": [
+        "#f0f5f9",
+        "#1e2022",
+        "#52616b",
+        "#bfc7d1",
+        "#34373b",
+        "#c9d6df",
+        "#e1e4e6"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 99
+    },
+    "ApiTester": {
+      "file": "components/ApiTester.tsx",
+      "colors": [],
+      "patterns": [
+        "hover-effects",
+        "border-radius",
+        "shadows"
+      ],
+      "complexity": 20
+    },
+    "BusinessCardEditor": {
+      "file": "components/BusinessCardEditor.tsx",
+      "colors": [
+        "#1e2022",
+        "#52616b",
+        "#e1e4e6",
+        "#c9d6df",
+        "#34373b",
+        "#f0f5f9"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows"
+      ],
+      "complexity": 82
+    },
+    "ContactDetail": {
+      "file": "components/ContactDetail.tsx",
+      "colors": [
+        "#bfc7d1",
+        "#e1e4e6",
+        "#52616b",
+        "#1e2022",
+        "#34373b",
+        "#f0f5f9",
+        "#788189"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 49
+    },
+    "ContactList": {
+      "file": "components/ContactList.tsx",
+      "colors": [
+        "#bfc7d1",
+        "#1e2022",
+        "#34373b",
+        "#52616b",
+        "#f0f5f9",
+        "#e1e4e6"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 40
+    },
+    "ContactManager": {
+      "file": "components/ContactManager.tsx",
+      "colors": [
+        "#bfc7d1",
+        "#1e2022",
+        "#52616b",
+        "#34373b",
+        "#f0f5f9"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 12
+    },
+    "Header": {
+      "file": "components/Header.tsx",
+      "colors": [
+        "#1e2022",
+        "#bfc7d1",
+        "#f0f5f9",
+        "#c9d6df",
+        "#e1e4e6"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows",
+        "gradients"
+      ],
+      "complexity": 44
+    },
+    "MessageView": {
+      "file": "components/MessageView.tsx",
+      "colors": [
+        "#f0f5f9",
+        "#e1e4e6",
+        "#1e2022",
+        "#4f80ff",
+        "#3a6bff",
+        "#f8f9fa",
+        "#52616b"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows",
+        "gradients"
+      ],
+      "complexity": 84
+    },
+    "NetworkView": {
+      "file": "components/NetworkView.tsx",
+      "colors": [
+        "#22c55e",
+        "#3b82f6",
+        "#1e2022",
+        "#52616b",
+        "#788189",
+        "#34373b",
+        "#6b7280",
+        "#bfc7d1",
+        "#e1e4e6",
+        "#f0f5f9",
+        "#4ade80",
+        "#60a5fa"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows",
+        "gradients"
+      ],
+      "complexity": 108
+    },
+    "NotificationView": {
+      "file": "components/NotificationView.tsx",
+      "colors": [
+        "#34373b",
+        "#52616b",
+        "#1e2022",
+        "#f0f5f9",
+        "#bfc7d1",
+        "#f8fafb",
+        "#8a9ba8",
+        "#e1e4e6"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows"
+      ],
+      "complexity": 46
+    },
+    "BasicInfoStep": {
+      "file": "components/resume-wizard/BasicInfoStep.tsx",
+      "colors": [
+        "#1e2022",
+        "#52616b",
+        "#c9d6df",
+        "#34373b",
+        "#f0f5f9"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 38
+    },
+    "EducationStep": {
+      "file": "components/resume-wizard/EducationStep.tsx",
+      "colors": [
+        "#1e2022",
+        "#52616b",
+        "#e1e4e6",
+        "#34373b",
+        "#f0f5f9",
+        "#c9d6df"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 56
+    },
+    "ExperienceStep": {
+      "file": "components/resume-wizard/ExperienceStep.tsx",
+      "colors": [
+        "#1e2022",
+        "#52616b",
+        "#e1e4e6",
+        "#34373b",
+        "#f0f5f9",
+        "#c9d6df"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 51
+    },
+    "PreviewStep": {
+      "file": "components/resume-wizard/PreviewStep.tsx",
+      "colors": [
+        "#1e2022",
+        "#52616b",
+        "#34373b",
+        "#f0f5f9",
+        "#e1e4e6",
+        "#c9d6df"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows"
+      ],
+      "complexity": 113
+    },
+    "ProjectsStep": {
+      "file": "components/resume-wizard/ProjectsStep.tsx",
+      "colors": [
+        "#1e2022",
+        "#52616b",
+        "#e1e4e6",
+        "#34373b",
+        "#f0f5f9",
+        "#c9d6df"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 63
+    },
+    "SkillsStep": {
+      "file": "components/resume-wizard/SkillsStep.tsx",
+      "colors": [
+        "#1e2022",
+        "#52616b",
+        "#e1e4e6",
+        "#34373b",
+        "#f0f5f9",
+        "#c9d6df"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 31
+    },
+    "ResumeView": {
+      "file": "components/ResumeView.tsx",
+      "colors": [
+        "#bfc7d1",
+        "#1e2022",
+        "#52616b",
+        "#34373b",
+        "#f0f5f9",
+        "#c9d6df",
+        "#e1e4e6"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows"
+      ],
+      "complexity": 54
+    },
+    "SettingsView": {
+      "file": "components/SettingsView.tsx",
+      "colors": [
+        "#e1e4e6",
+        "#52616b",
+        "#c9d6df",
+        "#34373b",
+        "#f0f5f9",
+        "#1e2022"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows"
+      ],
+      "complexity": 271
+    },
+    "Sidebar": {
+      "file": "components/Sidebar.tsx",
+      "colors": [
+        "#c9d6df",
+        "#bfc7d1",
+        "#34373b",
+        "#f0f5f9",
+        "#52616b",
+        "#1e2022"
+      ],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius"
+      ],
+      "complexity": 7
+    },
+    "WebSocketTest": {
+      "file": "components/WebSocketTest.tsx",
+      "colors": [],
+      "patterns": [
+        "hover-effects",
+        "transitions",
+        "border-radius",
+        "shadows"
+      ],
+      "complexity": 13
+    }
+  },
+  "figmaVariables": {
+    "Gray Scale/1": {
+      "type": "COLOR",
+      "value": "#f0f5f9",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Gray Scale/2": {
+      "type": "COLOR",
+      "value": "#1e2022",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Gray Scale/3": {
+      "type": "COLOR",
+      "value": "#e1e4e6",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Gray Scale/4": {
+      "type": "COLOR",
+      "value": "#34373b",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Gray Scale/5": {
+      "type": "COLOR",
+      "value": "#bfc7d1",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Gray Scale/6": {
+      "type": "COLOR",
+      "value": "#788189",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Gray Scale/7": {
+      "type": "COLOR",
+      "value": "#f8fafb",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Gray Scale/8": {
+      "type": "COLOR",
+      "value": "#f8f9fa",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Blue Tones/1": {
+      "type": "COLOR",
+      "value": "#4f80ff",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Blue Tones/2": {
+      "type": "COLOR",
+      "value": "#3a6bff",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Blue Tones/3": {
+      "type": "COLOR",
+      "value": "#3b82f6",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Blue Tones/4": {
+      "type": "COLOR",
+      "value": "#60a5fa",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Status Colors/1": {
+      "type": "COLOR",
+      "value": "#dc2626",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/1": {
+      "type": "COLOR",
+      "value": "#52616b",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/2": {
+      "type": "COLOR",
+      "value": "#c9d6df",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/3": {
+      "type": "COLOR",
+      "value": "#d1fae5",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/4": {
+      "type": "COLOR",
+      "value": "#065f46",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/5": {
+      "type": "COLOR",
+      "value": "#a7f3d0",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/6": {
+      "type": "COLOR",
+      "value": "#fee2e2",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/7": {
+      "type": "COLOR",
+      "value": "#fecaca",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/8": {
+      "type": "COLOR",
+      "value": "#22c55e",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/9": {
+      "type": "COLOR",
+      "value": "#6b7280",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/10": {
+      "type": "COLOR",
+      "value": "#4ade80",
+      "description": "Auto-extracted color from codebase"
+    },
+    "Others/11": {
+      "type": "COLOR",
+      "value": "#8a9ba8",
+      "description": "Auto-extracted color from codebase"
+    }
+  },
+  "recommendations": [
+    {
+      "type": "warning",
+      "message": "24개의 색상이 사용되고 있습니다. 디자인 시스템 통합을 고려해보세요."
+    },
+    {
+      "type": "info",
+      "message": "6개의 인라인 스타일이 발견되었습니다. CSS 변수로 전환을 고려해보세요."
+    },
+    {
+      "type": "improvement",
+      "message": "3개 컴포넌트에서 일관성 있는 패턴을 더 적용할 수 있습니다."
+    }
+  ]
+}

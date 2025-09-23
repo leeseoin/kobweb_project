@@ -15,12 +15,15 @@ public class BusinessCard {
     @Column(nullable = false)
     private UUID userId;
 
+    // 실제 명함 대상 사용자 ID (플랫폼 사용자인 경우)
+    private UUID targetUserId;
+
     private String name;
     private String email;
     private String company;
     private String position;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> skills;
 
     private LocalDateTime createdAt;
@@ -42,6 +45,8 @@ public class BusinessCard {
     public void setBusinessCardId(UUID businessCardId) { this.businessCardId = businessCardId; }
     public UUID getUserId() { return userId; }
     public void setUserId(UUID userId) { this.userId = userId; }
+    public UUID getTargetUserId() { return targetUserId; }
+    public void setTargetUserId(UUID targetUserId) { this.targetUserId = targetUserId; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }

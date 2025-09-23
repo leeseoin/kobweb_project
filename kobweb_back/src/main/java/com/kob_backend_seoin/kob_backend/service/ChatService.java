@@ -1,5 +1,6 @@
 package com.kob_backend_seoin.kob_backend.service;
 
+import com.kob_backend_seoin.kob_backend.domain.BusinessCard;
 import com.kob_backend_seoin.kob_backend.domain.ChatMessage;
 import com.kob_backend_seoin.kob_backend.domain.ChatRoom;
 import com.kob_backend_seoin.kob_backend.domain.User;
@@ -8,6 +9,7 @@ import com.kob_backend_seoin.kob_backend.dto.Chat.ChatMessageResponseDto;
 import com.kob_backend_seoin.kob_backend.dto.Chat.ChatRoomResponseDto;
 import com.kob_backend_seoin.kob_backend.exception.CustomException;
 import com.kob_backend_seoin.kob_backend.exception.ErrorCode;
+import com.kob_backend_seoin.kob_backend.repository.BusinessCardRepository;
 import com.kob_backend_seoin.kob_backend.repository.ChatMessageRepository;
 import com.kob_backend_seoin.kob_backend.repository.ChatRoomRepository;
 import com.kob_backend_seoin.kob_backend.repository.UserRepository;
@@ -36,6 +38,7 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
+    private final BusinessCardRepository businessCardRepository;
     // private final ManualCacheService manualCacheService;
     // private final CacheManager cacheManager;
     
@@ -47,10 +50,12 @@ public class ChatService {
     @Autowired
     public ChatService(ChatRoomRepository chatRoomRepository,
                        ChatMessageRepository chatMessageRepository,
-                       UserRepository userRepository) {
+                       UserRepository userRepository,
+                       BusinessCardRepository businessCardRepository) {
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
         this.userRepository = userRepository;
+        this.businessCardRepository = businessCardRepository;
         // this.manualCacheService = manualCacheService;
         // this.cacheManager = cacheManager;
     }
@@ -67,34 +72,8 @@ public class ChatService {
     // Spring Cache 디버깅 메서드 - 단순화된 테스트
     // @Cacheable(value = "debugCache", key = "#key")
     public String debugCache(String key) {
-        System.out.println("=== DEBUG CACHE MISS ===");
-        System.out.println("Key: " + key);
-        System.out.println("Timestamp: " + System.currentTimeMillis());
-        System.out.println("Thread: " + Thread.currentThread().getName());
-        System.out.println("Cache Key: " + key);
-        System.out.println("Returning: Debug result for: " + key);
         
-        // 직렬화 테스트를 위한 간단한 객체 반환
-        try {
-            String result = "Debug result for: " + key;
-            System.out.println("Serialization test - result: " + result);
-            System.out.println("Result type: " + result.getClass().getName());
-            System.out.println("Result length: " + result.length());
-            
-            // Spring Cache Manager 확인 (캐시 비활성화)
-            // System.out.println("=== Spring Cache Manager 확인 ===");
-            // System.out.println("CacheManager: " + (cacheManager != null ? cacheManager.getClass().getName() : "NULL"));
-            // if (cacheManager != null) {
-            //     System.out.println("CacheManager type: " + cacheManager.getClass().getSimpleName());
-            //     System.out.println("Cache names: " + String.join(", ", cacheManager.getCacheNames()));
-            // }
-            
-            return result;
-        } catch (Exception e) {
-            System.err.println("Serialization error: " + e.getMessage());
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
-        }
+        return "Debug result for: " + key;
     }
     
     // 수동 캐시 테스트 메서드 (캐시 비활성화)
@@ -137,7 +116,6 @@ public class ChatService {
 
     // 사용자의 채팅방 목록 조회 (Page 객체는 캐싱하지 않음)
     public Page<ChatRoomResponseDto> getUserChatRooms(UUID userId, int page, int size) {
-        System.out.println("=== DB에서 채팅방 목록 조회 (캐시 미스) ===");
         
         if (userId == null) {
             throw new CustomException("사용자 ID가 제공되지 않았습니다.", ErrorCode.INVALID_INPUT);
@@ -374,6 +352,59 @@ public class ChatService {
         String roomName = creator.getNickname() + " & " + participant.getNickname();
         
         // 채팅방 생성
+        ChatRoom chatRoom = new ChatRoom(roomName, creator, ChatRoom.ChatRoomType.ONE_TO_ONE);
+        chatRoom.addParticipant(participant);
+
+        ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
+        return convertToRoomResponseDto(savedChatRoom, null, 0);
+    }
+
+    // 명함 기반 1:1 채팅방 생성
+    public ChatRoomResponseDto createChatRoomByBusinessCard(UUID creatorId, String businessCardId) {
+        System.out.println("=== ChatService.createChatRoomByBusinessCard 호출됨 ===");
+        System.out.println("creatorId: " + creatorId);
+        System.out.println("businessCardId: " + businessCardId);
+
+        // 현재 사용자 조회
+        User creator = userRepository.findById(creatorId)
+                .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다.", ErrorCode.USER_NOT_FOUND));
+        System.out.println("creator 조회 성공: " + creator.getNickname());
+
+        // 명함 조회
+        UUID businessCardUuid;
+        try {
+            businessCardUuid = UUID.fromString(businessCardId);
+            System.out.println("UUID 파싱 성공: " + businessCardUuid);
+        } catch (IllegalArgumentException e) {
+            System.out.println("UUID 파싱 실패: " + e.getMessage());
+            throw new CustomException("유효하지 않은 명함 ID입니다.", ErrorCode.INVALID_INPUT);
+        }
+
+        BusinessCard businessCard = businessCardRepository.findById(businessCardUuid)
+                .orElseThrow(() -> {
+                    System.out.println("명함을 찾을 수 없음: " + businessCardUuid);
+                    return new CustomException("명함을 찾을 수 없습니다.", ErrorCode.BUSINESS_CARD_NOT_FOUND);
+                });
+        System.out.println("명함 조회 성공: " + businessCard.getName() + ", 소유자 ID: " + businessCard.getUserId());
+
+        // 명함의 대상 사용자 ID로 실제 플랫폼 사용자 조회 (targetUserId가 있으면 사용, 없으면 userId 사용)
+        UUID participantId = businessCard.getTargetUserId() != null ? businessCard.getTargetUserId() : businessCard.getUserId();
+        User participant = userRepository.findById(participantId)
+                .orElseThrow(() -> new CustomException("해당 명함의 사용자는 더 이상 플랫폼에 존재하지 않습니다.", ErrorCode.USER_NOT_FOUND));
+
+        // 자기 자신과의 채팅방 생성 방지
+        if (creatorId.equals(participant.getId())) {
+            throw new CustomException("자기 자신과는 채팅방을 생성할 수 없습니다.", ErrorCode.INVALID_INPUT);
+        }
+
+        // 기존 채팅방이 있는지 확인하고, 있으면 반환
+        Optional<ChatRoom> existingRoom = findExistingOneToOneChatRoom(creatorId, participant.getId());
+        if (existingRoom.isPresent()) {
+            return convertToRoomResponseDto(existingRoom.get(), null, 0);
+        }
+
+        // 새 채팅방 생성
+        String roomName = creator.getNickname() + " & " + participant.getNickname();
         ChatRoom chatRoom = new ChatRoom(roomName, creator, ChatRoom.ChatRoomType.ONE_TO_ONE);
         chatRoom.addParticipant(participant);
 

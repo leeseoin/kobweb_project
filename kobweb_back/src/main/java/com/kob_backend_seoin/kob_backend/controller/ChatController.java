@@ -219,13 +219,31 @@ public class ChatController {
         return ResponseEntity.ok(new ApiResponse<>(true, chatRoom, "사용자를 성공적으로 내보냈습니다."));
     }
 
+    @PostMapping("/rooms/business-card")
+    @Operation(summary = "명함 기반 1:1 채팅방 생성", description = "명함 ID를 통해 해당 사용자와의 1:1 채팅방을 생성하거나 기존 채팅방을 반환합니다.")
+    public ResponseEntity<ApiResponse<ChatRoomResponseDto>> createChatRoomByBusinessCard(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String businessCardId) {
+
+        System.out.println("=== ChatController.createChatRoomByBusinessCard 호출됨 ===");
+        System.out.println("받은 businessCardId: " + businessCardId);
+        System.out.println("받은 토큰: " + (token != null ? token.substring(0, Math.min(50, token.length())) + "..." : "null"));
+
+        UUID userId = extractUserIdFromToken(token);
+        System.out.println("추출된 userId: " + userId);
+
+        ChatRoomResponseDto chatRoom = chatService.createChatRoomByBusinessCard(userId, businessCardId);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(true, chatRoom, "명함 기반 1:1 채팅방을 성공적으로 생성했습니다."));
+    }
+
     @PutMapping("/rooms/{roomId}/name")
     @Operation(summary = "채팅방 이름 변경", description = "채팅방 이름을 변경합니다. (방장만 가능)")
     public ResponseEntity<ApiResponse<ChatRoomResponseDto>> updateRoomName(
             @RequestHeader("Authorization") String token,
             @PathVariable UUID roomId,
             @RequestParam String newName) {
-        
+
         UUID updaterId = extractUserIdFromToken(token);
         ChatRoomResponseDto chatRoom = chatService.updateRoomName(updaterId, roomId, newName);
         return ResponseEntity.ok(new ApiResponse<>(true, chatRoom, "채팅방 이름을 성공적으로 변경했습니다."));

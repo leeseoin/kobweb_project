@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for development
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: kob_backend
+      POSTGRES_USER: iseoin
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - kobweb-dev-network
+
+  # Redis for development
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - kobweb-dev-network
+
+volumes:
+  postgres_dev_data:
+    driver: local
+
+networks:
+  kobweb-dev-network:
+    driver: bridge

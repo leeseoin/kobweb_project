@@ -1,40 +1,71 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Dependencies
+node_modules/
+package-lock.json
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# Java
+target/
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.class
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+# Spring Boot
+application-local.yml
+application-prod.yml
+!src/**/application-prod.yml
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Environment variables
+.env
+*.env
+!env.example
 
-### VS Code ###
+# IDE
+.idea/
 .vscode/
+*.swp
+*.swo
+*~
 
-### .cursor editor ###
-.cursor/
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+log/
+
+# Build
+build/
+dist/
+out/
+
+# Next.js
+.next/
+.vercel/
+
+# Gradle
+.gradle/
+gradle-wrapper.jar
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Docker
+.dockerignore
+
+# Temporary files
+temp/
+tmp/
+tatus

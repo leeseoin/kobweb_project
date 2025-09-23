@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kobweb Components Sample</title>
+    <style>
+        /* 🎨 Design Tokens */
+        :root {
+            --primary-main: #1E2022;
+            --primary-light: #34373b;
+            --bg-main: #F0F5F9;
+            --bg-surface: #e1e4e6;
+            --bg-sidebar: #C9D6DF;
+            --text-primary: #1E2022;
+            --text-secondary: #52616B;
+            --border-main: #bfc7d1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            padding: 40px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--bg-surface);
+            padding-bottom: 12px;
+        }
+
+        /* 🔘 Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-main);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-main);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-sidebar);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-main);
+        }
+
+        /* 📝 Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-main);
+            border-radius: 8px;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(52, 55, 59, 0.1);
+        }
+
+        /* 🎯 Header */
+        .header {
+            background: var(--primary-main);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: #C9D6DF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        /* 🧭 Sidebar */
+        .layout {
+            display: flex;
+            gap: 24px;
+            min-height: 400px;
+        }
+
+        .sidebar {
+            width: 256px;
+            background: var(--bg-sidebar);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-item.active {
+            background: var(--primary-main);
+            color: white;
+        }
+
+        .sidebar-item:hover:not(.active) {
+            background: var(--bg-main);
+            color: var(--text-primary);
+        }
+
+        /* 📱 Cards */
+        .card {
+            background: white;
+            border: 1px solid var(--border-main);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 👤 Avatar */
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-sidebar);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .avatar-lg {
+            width: 64px;
+            height: 64px;
+            font-size: 20px;
+        }
+
+        /* 🏷️ Badge */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-primary {
+            background: var(--primary-main);
+            color: white;
+        }
+
+        .badge-secondary {
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+        }
+
+        /* 📊 Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .stat-card {
+            background: var(--bg-surface);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">Kobweb</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link">명함 관리</a></li>
+                    <li><a href="#" class="nav-link">헤드 헌터</a></li>
+                    <li><a href="#" class="nav-link">설정</a></li>
+                </ul>
+            </nav>
+            <div class="avatar">김</div>
+        </header>
+
+        <!-- Buttons Section -->
+        <div class="section">
+            <h2 class="section-title">🔘 Buttons</h2>
+            <button class="btn btn-primary">Primary Button</button>
+            <button class="btn btn-secondary">Secondary Button</button>
+            <button class="btn btn-outline">Outline Button</button>
+        </div>
+
+        <!-- Form Section -->
+        <div class="section">
+            <h2 class="section-title">📝 Form Elements</h2>
+            <div class="form-group">
+                <label class="form-label">이름</label>
+                <input type="text" class="form-input" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label class="form-label">이메일</label>
+                <input type="email" class="form-input" placeholder="이메일을 입력하세요">
+            </div>
+        </div>
+
+        <!-- Layout Section -->
+        <div class="section">
+            <h2 class="section-title">📱 Layout Components</h2>
+            <div class="layout">
+                <div class="sidebar">
+                    <a href="#" class="sidebar-item active">📊 대시보드</a>
+                    <a href="#" class="sidebar-item">👥 명함 관리</a>
+                    <a href="#" class="sidebar-item">🔗 네트워크</a>
+                    <a href="#" class="sidebar-item">💬 메시지</a>
+                    <a href="#" class="sidebar-item">🔔 알림</a>
+                    <a href="#" class="sidebar-item">⚙️ 설정</a>
+                </div>
+                <div style="flex: 1;">
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-number">47</div>
+                            <div class="stat-label">총 명함</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">새 연결</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">읽지 않은 메시지</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">최근 연결된 명함</h3>
+                            <span class="badge badge-primary">3개</span>
+                        </div>
+                        <div class="card-content">
+                            <p>새로운 비즈니스 연결을 통해 네트워크를 확장하고 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Components Showcase -->
+        <div class="section">
+            <h2 class="section-title">🧩 Components Showcase</h2>
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+                <div class="avatar avatar-lg">김</div>
+                <div>
+                    <h4 style="color: var(--text-primary);">김철수</h4>
+                    <p style="color: var(--text-secondary); font-size: 14px;">프론트엔드 개발자</p>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <span class="badge badge-primary">React</span>
+                        <span class="badge badge-secondary">JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

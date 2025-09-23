@@ -14,6 +14,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // OAuth2 관련 설정은 별도 클래스에서 처리
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -29,14 +31,15 @@ public class SecurityConfig {
                     "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs.yaml",
                     "/swagger-resources/**", "/webjars/**",
                     "/api/users/**", "/api/v1/users/**",
-                           // "/api/chat/test-cache", "/api/chat/debug-cache", "/api/chat/check-proxy", 
-                           // "/api/chat/test-cache-simple", "/api/chat/test-proxy", "/api/chat/test-cache-proxy", // 캐시 테스트 엔드포인트 허용 (비활성화)
+                    "/actuator/health", // Health check 허용
                     "/ws/**", "/ws/chat/**", "/topic/**", "/queue/**",
                     "/websocket-test.html", "/test-stomp.html", "/static/**", "/css/**", "/js/**", "/images/**",
                     "/*.html" // 루트의 HTML 파일만 허용
                 ).permitAll()
                 .anyRequest().authenticated()
             )
+            // OAuth2 로그인 설정은 별도 설정 클래스에서 처리
+            // .oauth2Login() - OAuth2 관련 클래스 로딩 문제로 인해 주석 처리
             .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

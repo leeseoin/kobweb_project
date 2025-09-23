@@ -15,16 +15,22 @@ import java.util.UUID;
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID> {
     
-    // 채팅방의 모든 메시지 조회 (최신순)
-    @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoom.id = :roomId ORDER BY cm.sequence DESC")
+    // 채팅방의 모든 메시지 조회 (최신순, Fetch Join 적용)
+    @Query("SELECT cm FROM ChatMessage cm " +
+           "LEFT JOIN FETCH cm.sender " +
+           "LEFT JOIN FETCH cm.chatRoom " +
+           "WHERE cm.chatRoom.id = :roomId ORDER BY cm.sequence DESC")
     Page<ChatMessage> findByChatRoomIdOrderBySentAtDesc(@Param("roomId") UUID roomId, Pageable pageable);
     
     // 채팅방의 모든 메시지 조회 (오래된순)
     @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoom.id = :roomId ORDER BY cm.sequence ASC")
     Page<ChatMessage> findByChatRoomIdOrderBySentAtAsc(@Param("roomId") UUID roomId, Pageable pageable);
     
-    // 특정 메시지 ID 이전의 메시지들 조회 (무한 스크롤용)
-    @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoom.id = :roomId AND cm.sequence < :lastSeq ORDER BY cm.sequence DESC")
+    // 특정 메시지 ID 이전의 메시지들 조회 (무한 스크롤용, Fetch Join 적용)
+    @Query("SELECT cm FROM ChatMessage cm " +
+           "LEFT JOIN FETCH cm.sender " +
+           "LEFT JOIN FETCH cm.chatRoom " +
+           "WHERE cm.chatRoom.id = :roomId AND cm.sequence < :lastSeq ORDER BY cm.sequence DESC")
     Page<ChatMessage> findByChatRoomIdAndSequenceBeforeOrderBySequenceDesc(
             @Param("roomId") UUID roomId,
             @Param("lastSeq") long lastSeq,

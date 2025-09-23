@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
@@ -28,11 +29,13 @@ public class CacheConfig {
     @Bean("redisConnectionFactory")
     @ConditionalOnMissingBean(RedisConnectionFactory.class)
     public RedisConnectionFactory redisConnectionFactory() {
-        LettuceConnectionFactory factory = new LettuceConnectionFactory();
-        factory.setHostName("localhost");
-        factory.setPort(6379);
-        factory.setDatabase(0);
-        factory.setTimeout(2000);
+        // 최신 방식: RedisStandaloneConfiguration 사용
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName("localhost");
+        config.setPort(6379);
+        config.setDatabase(0);
+        
+        LettuceConnectionFactory factory = new LettuceConnectionFactory(config);
         factory.setValidateConnection(true);
         factory.setShareNativeConnection(false);
         return factory;

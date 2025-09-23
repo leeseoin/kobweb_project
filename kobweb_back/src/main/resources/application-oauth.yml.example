@@ -1,0 +1,22 @@
+# OAuth2 설정 예시 파일
+# 실제 사용 시 application-oauth.yml로 복사하고 실제 값으로 변경하세요
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: your-google-client-id-here
+            client-secret: your-google-client-secret-here
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            scope:
+              - email
+              - profile
+          github:
+            client-id: your-github-client-id-here
+            client-secret: your-github-client-secret-here
+            redirect-uri: http://localhost:8080/login/oauth2/code/github
+            scope:
+              - user:email
+              - read:user

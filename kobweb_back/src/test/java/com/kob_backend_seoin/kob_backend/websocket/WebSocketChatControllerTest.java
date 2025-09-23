@@ -80,7 +80,7 @@ public class WebSocketChatControllerTest {
         
         // 메시지 전송
         WebSocketMessageDto.SendMessageRequest messageRequest = new WebSocketMessageDto.SendMessageRequest();
-        messageRequest.setRoomId(testRoom.getId().toString());
+        messageRequest.setRoomId(testRoom.getId());
         messageRequest.setContent("테스트 메시지입니다.");
         messageRequest.setClientMessageId("test-msg-" + System.currentTimeMillis());
         
@@ -113,7 +113,7 @@ public class WebSocketChatControllerTest {
         
         // 메시지 전송 시도
         WebSocketMessageDto.SendMessageRequest messageRequest = new WebSocketMessageDto.SendMessageRequest();
-        messageRequest.setRoomId(testRoom.getId().toString());
+        messageRequest.setRoomId(testRoom.getId());
         messageRequest.setContent("인증 없는 메시지");
         messageRequest.setClientMessageId("unauth-msg-" + System.currentTimeMillis());
         

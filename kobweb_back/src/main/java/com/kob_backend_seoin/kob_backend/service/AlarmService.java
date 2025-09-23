@@ -124,15 +124,33 @@ public class AlarmService {
 
     // DTO 변환 메서드
     private AlarmResponseDto toDto(Alarm alarm) {
-        return new AlarmResponseDto(
-            alarm.getAlarmId().toString(),
-            alarm.getTitle(),
-            alarm.getContent(),
-            alarm.getAlarmTime(),
-            alarm.isRead(),
-            alarm.getAlarmType(),
-            alarm.getCreatedAt(),
-            alarm.getUpdatedAt()
-        );
+        if ("CONNECTION".equals(alarm.getAlarmType()) && alarm.getRelatedEntityId() != null) {
+            // CONNECTION 알림인 경우 relatedEntityId 포함
+            return new AlarmResponseDto(
+                alarm.getAlarmId().toString(),
+                alarm.getTitle(),
+                alarm.getContent(),
+                alarm.getAlarmTime(),
+                alarm.isRead(),
+                alarm.getAlarmType(),
+                alarm.getCreatedAt(),
+                alarm.getUpdatedAt(),
+                alarm.getRelatedEntityId(),
+                alarm.getRelatedEntityType(),
+                alarm.getActionData()
+            );
+        } else {
+            // 일반 알림인 경우
+            return new AlarmResponseDto(
+                alarm.getAlarmId().toString(),
+                alarm.getTitle(),
+                alarm.getContent(),
+                alarm.getAlarmTime(),
+                alarm.isRead(),
+                alarm.getAlarmType(),
+                alarm.getCreatedAt(),
+                alarm.getUpdatedAt()
+            );
+        }
     }
 } 

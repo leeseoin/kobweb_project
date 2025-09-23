@@ -5,10 +5,13 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 @Table(name = "chat_rooms")
 public class ChatRoom {
+    public static final int MAX_PARTICIPANTS = 100; // 최대 참여자 수
+
     @Id
     @GeneratedValue
     private UUID id;
@@ -38,6 +41,9 @@ public class ChatRoom {
     @Column(nullable = false)
     private long nextSequence = 1L; // 방 단위 순차 번호 발행기
 
+    @Transient
+    private AtomicLong sequenceGenerator = new AtomicLong(1L);
+
     // 채팅방 타입 enum
     public enum ChatRoomType {
         ONE_TO_ONE,    // 1:1 채팅방
@@ -53,6 +59,7 @@ public class ChatRoom {
         this.createdAt = LocalDateTime.now();
         this.type = ChatRoomType.ONE_TO_ONE; // 기본값은 1:1
         this.participants.add(creator);
+        this.sequenceGenerator = new AtomicLong(this.nextSequence);
     }
 
     public ChatRoom(String name, User creator, ChatRoomType type) {
@@ -61,6 +68,7 @@ public class ChatRoom {
         this.createdAt = LocalDateTime.now();
         this.type = type;
         this.participants.add(creator);
+        this.sequenceGenerator = new AtomicLong(this.nextSequence);
     }
 
     public UUID getId() {
@@ -116,6 +124,10 @@ public class ChatRoom {
     }
 
     public void addParticipant(User user) {
+        if (this.participants.size() >= MAX_PARTICIPANTS) {
+            throw new RuntimeException("최대 참여자 수(" + MAX_PARTICIPANTS + "명)를 초과했습니다");
+        }
+
         this.participants.add(user);
         // 참여자가 2명을 초과하면 그룹 채팅방으로 변경
         if (this.type == ChatRoomType.ONE_TO_ONE && this.participants.size() > 2) {
@@ -141,13 +153,28 @@ public class ChatRoom {
         this.type = ChatRoomType.ONE_TO_ONE;
     }
 
-    public long issueSequence() {
-        long current = this.nextSequence;
-        this.nextSequence = this.nextSequence + 1;
+    public synchronized long issueSequence() {
+        if (this.sequenceGenerator == null) {
+            this.sequenceGenerator = new AtomicLong(this.nextSequence);
+        }
+        long current = this.sequenceGenerator.getAndIncrement();
+        this.nextSequence = this.sequenceGenerator.get();
         return current;
     }
 
     public void setNextSequence(long nextSequence) {
         this.nextSequence = nextSequence;
+        if (this.sequenceGenerator == null) {
+            this.sequenceGenerator = new AtomicLong(nextSequence);
+        } else {
+            this.sequenceGenerator.set(nextSequence);
+        }
+    }
+
+    @PostLoad
+    private void initializeSequenceGenerator() {
+        if (this.sequenceGenerator == null) {
+            this.sequenceGenerator = new AtomicLong(this.nextSequence);
+        }
     }
 } 

@@ -1,0 +1,41 @@
+🎨 Figma Variables 설정 가이드
+
+=== 주요 색상 (사용 빈도 높음) ===
+Primary/Main = #1E2022        (18회 사용)
+Primary/Light = #34373b       (16회 사용)
+
+Background/Main = #F0F5F9     (18회 사용)
+Background/Surface = #e1e4e6  (15회 사용)
+Background/Sidebar = #C9D6DF  (12회 사용)
+
+Text/Primary = #1E2022        (18회 사용)
+Text/Secondary = #52616B      (17회 사용)
+Text/Tertiary = #788189       (2회 사용)
+
+Border/Main = #bfc7d1         (9회 사용)
+
+=== 상태 색상 ===
+Success/Background = #d1fae5
+Success/Text = #065f46
+Success/Border = #a7f3d0
+
+Error/Background = #fee2e2
+Error/Text = #dc2626
+Error/Border = #fecaca
+
+=== 액센트 색상 ===
+Info/Main = #4F80FF
+Info/Hover = #3a6bff
+
+=== 브랜드 색상 ===
+Blue/Light = #60a5fa
+Blue/Main = #3b82f6
+Green/Main = #22c55e
+Green/Light = #4ade80
+
+=== Figma에서 설정 방법 ===
+1. 좌측 패널에서 Variables (변수) 아이콘 클릭
+2. "Create variable" 버튼 클릭
+3. 위의 이름과 색상값을 하나씩 입력
+4. Collection 이름: "Kobweb Colors"
+5. Mode: "Light" (나중에 Dark 모드 추가 가능)

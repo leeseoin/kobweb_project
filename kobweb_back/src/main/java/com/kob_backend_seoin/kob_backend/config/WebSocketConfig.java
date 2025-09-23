@@ -32,6 +32,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Autowired
     private JwtProvider jwtProvider;
 
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 클라이언트에서 SockJS를 쓴다면 이 경로로 접속해야 합니다: http://localhost:8080/ws/chat
@@ -57,12 +58,43 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setUserDestinationPrefix("/user");
     }
 
-    // ★ Spring Security WebSocket 통합을 위해 ChannelInterceptor 제거
     @Override
     public void configureClientInboundChannel(org.springframework.messaging.simp.config.ChannelRegistration registration) {
-        // Spring Security WebSocket 통합을 사용하여 Principal 동기화
-        // 수동 ChannelInterceptor 구현 제거
-        log.info("WebSocket Security 통합 모드 활성화");
+        registration.interceptors(new ChannelInterceptor() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+
+                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    // CONNECT 시 handshake에서 저장한 Principal을 STOMP 세션에 설정
+                    Object userPrincipal = accessor.getSessionAttributes().get("user");
+                    if (userPrincipal instanceof UsernamePasswordAuthenticationToken) {
+                        accessor.setUser((UsernamePasswordAuthenticationToken) userPrincipal);
+                        if (log.isLoggable(java.util.logging.Level.FINE)) {
+                            log.fine("STOMP CONNECT: Principal 설정됨 - " + ((UsernamePasswordAuthenticationToken) userPrincipal).getName());
+                        }
+                    } else {
+                        log.warning("STOMP CONNECT: Principal을 찾을 수 없음");
+                    }
+                } else if (StompCommand.SEND.equals(accessor.getCommand())) {
+                    // SEND 메시지에서 SessionAttributes에서 Principal 복원
+                    Object userPrincipal = accessor.getSessionAttributes().get("user");
+                    if (userPrincipal instanceof UsernamePasswordAuthenticationToken) {
+                        accessor.setUser((UsernamePasswordAuthenticationToken) userPrincipal);
+                        if (log.isLoggable(java.util.logging.Level.FINE) && accessor.getUser() == null) {
+                            log.fine("STOMP SEND: Principal 복원 실패");
+                        }
+                    } else {
+                        if (log.isLoggable(java.util.logging.Level.FINE)) {
+                            log.fine("STOMP SEND: SessionAttributes에 user 정보 없음");
+                        }
+                    }
+                }
+
+                return message;
+            }
+        });
+        log.info("WebSocket ChannelInterceptor 활성화");
     }
 
     @Bean
@@ -122,61 +154,86 @@ class JwtHandshakeInterceptor implements org.springframework.web.socket.server.H
                                    org.springframework.web.socket.WebSocketHandler wsHandler, 
                                    java.util.Map<String, Object> attributes) {
         try {
-            // 🔍 디버깅 정보 출력
-            log.info("=== Handshake 요청 분석 시작 ===");
-            log.info("Request URI: " + request.getURI());
-            log.info("Request Path: " + request.getURI().getPath());
-            log.info("Request Query: " + request.getURI().getQuery());
-            log.info("Request Headers: " + request.getHeaders());
+            // 🔍 디버깅 정보 출력 (FINE 레벨로 변경)
+            if (log.isLoggable(java.util.logging.Level.FINE)) {
+                log.fine("=== Handshake 요청 분석 시작 ===");
+                log.fine("Request URI: " + request.getURI());
+                log.fine("Request Path: " + request.getURI().getPath());
+                log.fine("Request Query: " + request.getURI().getQuery());
+                log.fine("Request Headers: " + request.getHeaders());
+            }
             
             // 쿼리 파라미터에서 token 추출
             String query = request.getURI().getQuery();
+            log.info("=== JWT 핸드셰이크 인증 시작 ===");
             log.info("쿼리 파라미터: " + query);
             log.info("쿼리에 token 포함: " + (query != null && query.contains("token=")));
-            
+
+            String token = null;
+
             if (query != null && query.contains("token=")) {
                 String[] params = query.split("&");
                 log.info("파라미터 개수: " + params.length);
+
                 for (int i = 0; i < params.length; i++) {
                     String param = params[i];
                     log.info("파라미터 " + i + ": " + param);
+
                     if (param.startsWith("token=")) {
-                        String token = param.substring(6);
-                        log.info("Handshake에서 JWT 토큰 발견: " + token.substring(0, 10) + "...");
+                        token = java.net.URLDecoder.decode(param.substring(6), "UTF-8");
+                        log.info("JWT 토큰 발견 (디코딩 후)");
                         log.info("토큰 길이: " + token.length() + "자");
-                        
-                        // JWT 검증 및 사용자 ID 추출
-                        var decodedJWT = jwtProvider.verifyToken(token);
-                        String userId = decodedJWT.getSubject();
-                        
-                        // attributes에 사용자 ID와 토큰 저장
-                        attributes.put("userId", userId);
-                        attributes.put("token", token);
-                        
-                        // Principal 생성하여 attributes에 저장 (핵심!)
-                        var principal = new UsernamePasswordAuthenticationToken(
-                                userId, null, List.of(new SimpleGrantedAuthority("USER"))
-                        );
-                        attributes.put("user", principal);
-                        
-                        // 추가 정보 저장
-                        attributes.put("authenticated", true);
-                        attributes.put("authorities", List.of(new SimpleGrantedAuthority("USER")));
-                        
-                        log.info("=== Handshake 인증 성공 ===");
-                        log.info("User ID: " + userId);
-                        log.info("Session Key: " + request.getHeaders().getFirst("Sec-WebSocket-Key"));
-                        log.info("Principal 설정됨: " + principal.getName());
-                        log.info("Attributes 저장됨: " + attributes.keySet());
-                        log.info("=========================");
-                        
-                        return true;
+                        log.info("토큰 시작: " + (token.length() > 20 ? token.substring(0, 20) + "..." : token));
+                        break;
                     }
                 }
             }
-            
-            log.warning("Handshake에서 JWT 토큰을 찾을 수 없음");
-            return true; // 토큰이 없어도 연결은 허용 (인증은 나중에)
+
+            if (token != null) {
+                // Bearer 접두사 제거 (있다면)
+                if (token.startsWith("Bearer ")) {
+                    token = token.substring(7);
+                    log.info("Bearer 접두사 제거됨");
+                }
+
+                try {
+                    // JWT 검증 및 사용자 ID 추출
+                    var decodedJWT = jwtProvider.verifyToken(token);
+                    String userId = decodedJWT.getSubject();
+
+                    log.info("JWT 검증 성공!");
+                    log.info("User ID: " + userId);
+
+                    // attributes에 사용자 ID와 토큰 저장
+                    attributes.put("userId", userId);
+                    attributes.put("token", token);
+
+                    // Principal 생성하여 attributes에 저장 (핵심!)
+                    var principal = new UsernamePasswordAuthenticationToken(
+                            userId, null, List.of(new SimpleGrantedAuthority("USER"))
+                    );
+                    attributes.put("user", principal);
+
+                    // 추가 정보 저장
+                    attributes.put("authenticated", true);
+                    attributes.put("authorities", List.of(new SimpleGrantedAuthority("USER")));
+
+                    log.info("=== Handshake 인증 성공 ===");
+                    log.info("Principal 설정됨: " + principal.getName());
+                    log.info("Attributes 저장됨: " + attributes.keySet());
+                    log.info("=========================");
+
+                    return true;
+
+                } catch (Exception jwtError) {
+                    log.severe("JWT 검증 실패: " + jwtError.getMessage());
+                    jwtError.printStackTrace();
+                    return false; // JWT 검증 실패 시 연결 거부
+                }
+            }
+
+            log.warning("Handshake에서 JWT 토큰을 찾을 수 없음 - 연결 거부");
+            return false; // 토큰이 없으면 연결 거부
             
         } catch (Exception e) {
             log.severe("Handshake JWT 인증 실패: " + e.getMessage());

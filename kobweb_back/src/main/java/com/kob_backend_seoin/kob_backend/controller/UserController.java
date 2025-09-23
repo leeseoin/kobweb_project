@@ -27,15 +27,25 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<UserSignupResponseDto>> signup(@RequestBody UserSignupRequestDto requestDto) {
-        UserSignupResponseDto responseDto = userService.signup(requestDto);
-        return ResponseEntity.status(201)
-            .body(new ApiResponse<>(true, responseDto, "회원가입이 성공적으로 완료되었습니다."));
+        try {
+            UserSignupResponseDto responseDto = userService.signup(requestDto);
+            return ResponseEntity.status(201)
+                .body(new ApiResponse<>(true, responseDto, "회원가입이 성공적으로 완료되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(new ApiResponse<>(false, null, e.getMessage()));
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<UserLoginResponseDto>> login(@RequestBody UserLoginRequestDto requestDto) {
-        UserLoginResponseDto responseDto = userService.login(requestDto);
-        return ResponseEntity.ok(new ApiResponse<>(true, responseDto, "로그인에 성공했습니다."));
+        try {
+            UserLoginResponseDto responseDto = userService.login(requestDto);
+            return ResponseEntity.ok(new ApiResponse<>(true, responseDto, "로그인에 성공했습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(new ApiResponse<>(false, null, e.getMessage()));
+        }
     }
 
     // 전체 사용자 조회

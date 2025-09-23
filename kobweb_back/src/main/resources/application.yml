@@ -2,11 +2,18 @@ spring:
   application:
     name: kob_backend
 
+  # 프로파일 설정
+  profiles:
+    active: dev
+
   datasource:
     url: jdbc:postgresql://localhost:5432/kob_backend
     driver-class-name: org.postgresql.Driver
     username: iseoin
     password: 1234
+    hikari:
+      auto-commit: false
+      transaction-isolation: TRANSACTION_READ_COMMITTED
 
   jpa:
     hibernate:
@@ -18,6 +25,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        generate_statistics: true
+        jdbc:
+          batch_size: 20
+        connection:
+          autocommit: false
+    open-in-view: false
 
   # 인코딩 설정 추가
   http:
@@ -27,15 +40,62 @@ spring:
       force: true
 
   # Redis 및 Cache 설정은 Java Config에서 완전히 관리 (비활성화)
-  
+
   # AOP 프록시 설정 - CGLIB 강제 사용
   aop:
     proxy-target-class: true
     auto: true
-  
+
   # Spring Cache 프록시 강제 생성
   main:
     allow-bean-definition-overriding: true
+
+  # OAuth2 설정 (JWT 인증만 사용하므로 비활성화)
+  # security:
+  #   oauth2:
+  #     client:
+  #       registration:
+  #         google:
+  #           client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
+  #           client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+  #           redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8080/login/oauth2/code/google}
+  #           scope:
+  #             - email
+  #             - profile
+  #         github:
+  #           client-id: ${GITHUB_CLIENT_ID:your-github-client-id}
+  #           client-secret: ${GITHUB_CLIENT_SECRET:your-github-client-secret}
+  #           redirect-uri: ${GITHUB_REDIRECT_URI:http://localhost:8080/login/oauth2/code/github}
+  #           scope:
+  #             - user:email
+  #             - read:user
+  #       provider:
+  #         google:
+  #           authorization-uri: https://accounts.google.com/o/oauth2/auth
+  #           token-uri: https://oauth2.googleapis.com/token
+  #           user-info-uri: https://www.googleapis.com/oauth2/v2/userinfo
+  #           user-name-attribute: email
+  #         github:
+  #           authorization-uri: https://github.com/login/oauth/authorize
+  #           token-uri: https://github.com/login/oauth/access_token
+  #           user-info-uri: https://api.github.com/user
+  #           user-name-attribute: login
+
+# Actuator 설정 (Health Check & Monitoring)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    db:
+      enabled: true
+    redis:
+      enabled: true
 
 server:
   port: 8080
@@ -56,3 +116,19 @@ logging:
     com.kob_backend_seoin.kob_backend: DEBUG
     # org.springframework.cache: DEBUG
     # org.springframework.data.redis.cache: DEBUG
+
+# JWT 설정
+jwt:
+  secret: ${JWT_SECRET:kob_secret_key_2024_default}
+  access-token-expire-ms: 3600000  # 1시간
+  refresh-token-expire-ms: 604800000  # 7일
+
+# 애플리케이션 설정
+app:
+  cors:
+    allowed-origins: "http://localhost:3000,http://127.0.0.1:3000"
+  oauth2:
+    authorized-redirect-uri: "http://localhost:3000/auth/callback"
+
+---
+# 운영 환경 설정 (application-prod.yml로 이동됨)

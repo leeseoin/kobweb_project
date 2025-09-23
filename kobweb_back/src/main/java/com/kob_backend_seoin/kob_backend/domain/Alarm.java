@@ -27,7 +27,12 @@ public class Alarm {
     private boolean isRead = false;
 
     @Column(nullable = false)
-    private String alarmType; // "SYSTEM", "REMINDER", "NOTIFICATION" 등
+    private String alarmType; // "SYSTEM", "REMINDER", "NOTIFICATION", "CONNECTION" 등
+
+    // CONNECTION 알림용 추가 필드들
+    private UUID relatedEntityId;    // 관련 엔티티 ID (FriendRequest ID 등)
+    private String relatedEntityType; // 관련 엔티티 타입 ("FRIEND_REQUEST" 등)
+    private String actionData;       // 액션 관련 데이터 (JSON 형태)
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -75,10 +80,32 @@ public class Alarm {
     
     public String getAlarmType() { return alarmType; }
     public void setAlarmType(String alarmType) { this.alarmType = alarmType; }
-    
+
+    public UUID getRelatedEntityId() { return relatedEntityId; }
+    public void setRelatedEntityId(UUID relatedEntityId) { this.relatedEntityId = relatedEntityId; }
+
+    public String getRelatedEntityType() { return relatedEntityType; }
+    public void setRelatedEntityType(String relatedEntityType) { this.relatedEntityType = relatedEntityType; }
+
+    public String getActionData() { return actionData; }
+    public void setActionData(String actionData) { this.actionData = actionData; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    
+
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    // CONNECTION 알림 생성을 위한 정적 메서드
+    public static Alarm createConnectionAlarm(UUID userId, String title, String content, UUID friendRequestId) {
+        Alarm alarm = new Alarm();
+        alarm.setUserId(userId);
+        alarm.setTitle(title);
+        alarm.setContent(content);
+        alarm.setAlarmTime(LocalDateTime.now());
+        alarm.setAlarmType("CONNECTION");
+        alarm.setRelatedEntityId(friendRequestId);
+        alarm.setRelatedEntityType("FRIEND_REQUEST");
+        return alarm;
+    }
 } 

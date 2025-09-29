@@ -36,4 +36,14 @@ public class JwtProvider {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY)).build();
         return verifier.verify(token);
     }
+
+    public boolean isTokenExpired(String token) {
+        try {
+            DecodedJWT decodedJWT = verifyToken(token);
+            Date expiresAt = decodedJWT.getExpiresAt();
+            return expiresAt.before(new Date());
+        } catch (JWTVerificationException e) {
+            return true; // 검증 실패 시 만료된 것으로 처리
+        }
+    }
 } 

@@ -10,13 +10,24 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop # 개발 환경에서만 사용 → 서버를 재시작 할 때마다 테이블 초기화
+      # ddl-auto 명령어 참고 자료: https://mangkyu.tistory.com/426
+      # ddl-auto: create-drop # 개발 환경에서만 사용 → 애플리케이션 시작 시 스키마를 삭제 후 생성하고, 종료 시점에 다시 삭제함.
       # ddl-auto: none # 운영 환경에서 사용 → 테이블 초기화 방지
+      ddl-auto: none
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         format_sql: true
+
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: password
+    # 애플리케이션 시작 시 스키마 재생성 (개발용)
+    data:
+      auto-index: none
 
 server:
   port: 8080

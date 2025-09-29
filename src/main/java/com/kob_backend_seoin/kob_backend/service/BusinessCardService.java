@@ -6,6 +6,8 @@ import com.kob_backend_seoin.kob_backend.dto.BusinessCard.BusinessCardResponseDt
 import com.kob_backend_seoin.kob_backend.exception.CustomException;
 import com.kob_backend_seoin.kob_backend.exception.ErrorCode;
 import com.kob_backend_seoin.kob_backend.repository.BusinessCardRepository;
+import com.kob_backend_seoin.kob_backend.repository.UserRepository;
+import com.kob_backend_seoin.kob_backend.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +20,15 @@ import java.util.stream.Collectors;
 @Service
 public class BusinessCardService {
     private final BusinessCardRepository businessCardRepository;
+    private final NetworkService networkService;
+    private final UserRepository userRepository;
 
+    // neo4j 연동
     @Autowired
-    public BusinessCardService(BusinessCardRepository businessCardRepository) {
+    public BusinessCardService(BusinessCardRepository businessCardRepository, NetworkService networkService, UserRepository userRepository) {
         this.businessCardRepository = businessCardRepository;
+        this.networkService = networkService;
+        this.userRepository = userRepository;
     }
 
     // 명함 등록
@@ -34,6 +41,29 @@ public class BusinessCardService {
         card.setPosition(dto.getPosition());
         card.setSkills(dto.getSkills());
         BusinessCard saved = businessCardRepository.save(card);
+
+        try {
+            // 이메일 기반으로 deterministic UUID 생성
+            UUID friendUserId = UUID.nameUUIDFromBytes(dto.getEmail().getBytes());
+
+            // 1. 명함 주인의 Person 노드 생성
+            networkService.createPersonFromBusinessCard(friendUserId, dto.getName(), dto.getEmail(), dto.getCompany(), dto.getPosition());
+
+            // 2. 명함 추가한 사람(나)의 Person 노드도 생성 (없으면)
+            Optional<User> currentUser = userRepository.findById(userId);
+            if (currentUser.isPresent()) {
+                User user = currentUser.get();
+                networkService.createPersonFromBusinessCard(userId, user.getNickname(), user.getEmail(), "", "");
+            }
+
+            // 3. 친구 관계 생성: 나 -> 명함 주인
+            networkService.addFriendConnection(userId, friendUserId);
+
+            System.out.println("✅ 친구 관계 생성: " + userId + " -> " + dto.getName());
+        } catch (Exception e) {
+            System.err.println("❌ Neo4j 연동 실패 (명함은 정상 저장됨): " + e.getMessage());
+        }
+
         return toDto(saved);
     }
 

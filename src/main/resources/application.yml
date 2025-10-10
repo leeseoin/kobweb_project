@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: kob_backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kob_backend
+    driver-class-name: org.postgresql.Driver
+    username: iseoin
+    password:
+
+  jpa:
+    hibernate:
+      # ddl-auto 명령어 참고 자료: https://mangkyu.tistory.com/426
+      # ddl-auto: create # 개발 환경에서만 사용 → 애플리케이션 시작 시 스키마를 삭제 후 생성하고, 종료 시점에 다시 삭제함.
+      # ddl-auto: none # 운영 환경에서 사용 → 테이블 초기화 방지
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: password
+    # 애플리케이션 시작 시 스키마 재생성 (개발용)
+    data:
+      auto-index: none
+
+  # Redis 설정 (채팅 부가기능: 온라인 사용자, 안 읽은 메시지 등)
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: # Redis 비밀번호 (필요시 설정)
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+
+  # RabbitMQ 설정 (STOMP 메시지 브로커)
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    # STOMP 플러그인 포트 (기본 61613)
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000ms
+        max-attempts: 3
+
+server:
+  port: 8080

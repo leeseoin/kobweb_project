@@ -51,8 +51,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
 
-        // RabbitMQ STOMP Broker Relay 사용 (Scale-out 지원)
-        registry.enableStompBrokerRelay("/topic", "/queue", "/chat")
+        // SimpleBroker - 테스트 완료, RabbitMQ로 전환
+        // var broker = registry.enableSimpleBroker("/topic", "/queue");
+        // broker.setTaskScheduler(wsHeartbeatTaskScheduler());
+        // broker.setHeartbeatValue(new long[]{10000, 10000});
+
+        // 🔥 RabbitMQ STOMP Broker Relay 사용 (Scale-out 지원)
+        registry.enableStompBrokerRelay("/topic", "/queue")
                 .setRelayHost("localhost")
                 .setRelayPort(61613) // RabbitMQ STOMP 플러그인 포트
                 .setClientLogin("guest")
@@ -61,11 +66,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setSystemPasscode("guest")
                 .setVirtualHost("/")
                 .setTaskScheduler(wsHeartbeatTaskScheduler());
-
-        // Fallback: Simple Broker (RabbitMQ 연결 실패 시)
-        // var broker = registry.enableSimpleBroker("/topic", "/queue");
-        // broker.setTaskScheduler(wsHeartbeatTaskScheduler());
-        // broker.setHeartbeatValue(new long[]{10000, 10000});
 
         registry.setUserDestinationPrefix("/user");
     }

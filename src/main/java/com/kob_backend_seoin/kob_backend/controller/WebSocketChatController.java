@@ -19,7 +19,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -448,21 +447,21 @@ public class WebSocketChatController {
 
             // 공통 인증 검증 로직 사용
             final UUID userId = webSocketAuthService.validateAndExtractUserId(principal, headerAccessor);
-            
+
             // 사용자 정보 조회
             User sender = userRepository.findById(userId)
                     .orElseThrow(() -> new CustomException("사용자를 찾을 수 없습니다.", ErrorCode.USER_NOT_FOUND));
-            
+
             // 채팅방 정보 조회 및 사용자 참여 여부 확인 (LazyInitializationException 방지)
             UUID roomId = request.getRoomId();
             boolean isParticipant = chatRoomRepository.isUserParticipant(roomId, userId);
             ChatRoom chatRoom = chatRoomRepository.findById(roomId)
                     .orElseThrow(() -> new CustomException("채팅방을 찾을 수 없습니다.", ErrorCode.CHAT_ROOM_NOT_FOUND));
-            
+
             if (!isParticipant) {
                 throw new CustomException("사용자가 해당 채팅방에 참여하지 않습니다.", ErrorCode.USER_NOT_IN_CHAT_ROOM);
             }
-                
+
             // 멱등성 체크: clientMessageId가 있으면 중복 저장 방지
             if (request.getClientMessageId() != null && !request.getClientMessageId().trim().isEmpty()) {
                 var existing = chatMessageRepository.findByChatRoom_IdAndClientMessageId(chatRoom.getId(), request.getClientMessageId());
@@ -492,8 +491,8 @@ public class WebSocketChatController {
                             notification
                     );
 
-                    // 채팅방 토픽으로 메시지 재브로드캐스트
-                    String topicDestination = "/topic/chat/" + chatRoom.getId().toString();
+                    // 채팅방 토픽으로 메시지 재브로드캐스트 (RabbitMQ 호환 패턴)
+                    String topicDestination = "/topic/rooms." + chatRoom.getId().toString();
                     messagingTemplate.convertAndSend(topicDestination, response);
 
                     WsEnvelope<WsEnvelope.ReceiptPayload> dupReceipt = new WsEnvelope<>(
@@ -510,7 +509,8 @@ public class WebSocketChatController {
             // 순서 번호 발행
             long sequence = chatRoom.issueSequence();
 
-            // ChatMessageService를 통한 트랜잭션 처리된 메시지 저장
+            // Service의 @Transactional 메서드 직접 호출
+            log.info("🔥 메시지 저장 시작...");
             ChatMessage savedMessage = chatMessageService.saveMessage(
                 request.getContent(),
                 sender,
@@ -518,13 +518,14 @@ public class WebSocketChatController {
                 sequence,
                 request.getClientMessageId()
             );
-            
+            log.info("✅ 메시지 저장 완료! savedMessage ID: " + (savedMessage != null ? savedMessage.getId() : "null"));
+
             // 새 메시지 알림 생성
             WebSocketMessageDto.UserInfoDto senderInfo = new WebSocketMessageDto.UserInfoDto(
                     sender.getId(),
                     sender.getNickname()
             );
-            
+
             WebSocketMessageDto.NewMessageNotification notification = new WebSocketMessageDto.NewMessageNotification(
                     savedMessage.getId(),
                     chatRoom.getId(),
@@ -540,10 +541,10 @@ public class WebSocketChatController {
                     System.currentTimeMillis(),
                     notification
             );
-            
-            
-            // 채팅방 토픽으로 메시지 브로드캐스트
-            String topicDestination = "/topic/chat/" + chatRoom.getId().toString();
+
+
+            // 채팅방 토픽으로 메시지 브로드캐스트 (RabbitMQ 호환 패턴)
+            String topicDestination = "/topic/rooms." + chatRoom.getId().toString();
 
             log.info("=== 메시지 브로드캐스트 ===");
             log.info("Destination: " + topicDestination);
@@ -562,11 +563,11 @@ public class WebSocketChatController {
                     new WsEnvelope.ReceiptPayload(request.getClientMessageId(), "ok", savedMessage.getId().toString())
             );
             messagingTemplate.convertAndSendToUser(userId.toString(), "/queue/receipts", receipt);
-            
+
         } catch (Exception e) {
             log.severe("메시지 전송 중 오류 발생: " + e.getMessage());
             e.printStackTrace();
-            
+
             // 에러 응답 - Principal 안전 처리
             WsEnvelope<WsEnvelope.ErrorPayload> response = new WsEnvelope<>(
                     "error",

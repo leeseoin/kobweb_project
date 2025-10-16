@@ -58,6 +58,7 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     setConnectionStatus('connecting');
 
     // SockJS URL with token (HTTP/HTTPS for SockJS)
+    // 채팅 웹소켓 연결
     const sockjsUrl = process.env.NODE_ENV === 'development'
       ? `http://localhost:8080/ws/chat?token=${encodeURIComponent(token)}`
       : `https://${window.location.host}/ws/chat?token=${encodeURIComponent(token)}`;
@@ -254,14 +255,14 @@ export function useChatWebSocket() {
       console.error('Chat WebSocket error:', error);
     }
   });
-
+  // 채팅방 구독
   const subscribeToRoom = useCallback((roomId: string) => {
     if (!webSocket.isConnected) {
       console.warn('WebSocket not connected, cannot subscribe to room:', roomId);
       return null;
     }
 
-    const destination = `/topic/chat/${roomId}`;
+    const destination = `/topic/rooms.${roomId}`;
     return webSocket.subscribe(destination, (message: WebSocketMessage) => {
       if (message.type === 'chat.message') {
         const chatMessage = message.payload as ChatMessageData;
@@ -290,7 +291,7 @@ export function useChatWebSocket() {
       // Handle room-related messages (invitations, etc.)
     });
   }, [webSocket.isConnected, webSocket.subscribe]);
-
+  // 메시지 전송
   const sendChatMessage = useCallback((roomId: string, content: string, clientMessageId?: string) => {
     const messageData = {
       roomId,

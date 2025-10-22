@@ -1,0 +1,49 @@
+services:
+  # Neo4j Database
+  neo4j:
+    image: neo4j:2025.09.0-community-bullseye
+    container_name: kob-neo4j
+    ports:
+      - "7474:7474"   # HTTP
+      - "7687:7687"   # Bolt
+    environment:
+      - NEO4J_AUTH=neo4j/password # admin/passwords
+    volumes:
+      - neo4j_data:/data
+    restart: unless-stopped
+
+  # Redis for Chat Features
+  redis:
+    image: redis:8.2.1
+    container_name: kob-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # RabbitMQ with STOMP Plugin (STOMP는 RabbitMQ 플러그인입니다)
+  rabbitmq:
+    image: rabbitmq:4.2-rc
+    container_name: kob-rabbitmq
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+      - "61613:61613" # STOMP
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    # STOMP 플러그인 자동 활성화
+    command: >
+      bash -c "
+      rabbitmq-plugins enable rabbitmq_stomp rabbitmq_management &&
+      rabbitmq-server
+      "
+
+volumes:
+  neo4j_data:
+  redis_data:
+  rabbitmq_data:
